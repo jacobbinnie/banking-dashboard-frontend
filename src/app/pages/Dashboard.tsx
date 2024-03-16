@@ -44,7 +44,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="hidden flex-col md:flex">
+      <div className="flex flex-col md:flex">
         <div className="border-b">
           <div className="flex h-16 items-center px-4">
             <TeamSwitcher />
@@ -75,7 +75,7 @@ export default function Dashboard() {
                   <AccountCard account={account} />
                 ))}
               </div>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
+              <div className="grid gap-y-4 lg:gap-4 md:grid-cols-2 lg:grid-cols-6">
                 <ChartCard
                   type="BURN"
                   title={"Runway & cash zero"}
