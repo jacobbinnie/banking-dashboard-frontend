@@ -107,6 +107,12 @@ export interface AccountAndBalanceDto {
      * @memberof AccountAndBalanceDto
      */
     'consolidatedAccountInformation'?: object;
+    /**
+     * 
+     * @type {InstitutionDto}
+     * @memberof AccountAndBalanceDto
+     */
+    'institution': InstitutionDto;
 }
 
 export const AccountAndBalanceDtoUsageTypeEnum = {
@@ -415,6 +421,25 @@ export interface BalanceAmountDto {
 /**
  * 
  * @export
+ * @interface CountriesDto
+ */
+export interface CountriesDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CountriesDto
+     */
+    'displayName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CountriesDto
+     */
+    'countryCode2': string;
+}
+/**
+ * 
+ * @export
  * @interface CreditLineDto
  */
 export interface CreditLineDto {
@@ -455,6 +480,86 @@ export interface InitiateConnectDto {
      * @memberof InitiateConnectDto
      */
     'institutionId': string;
+}
+/**
+ * 
+ * @export
+ * @interface InstitutionDto
+ */
+export interface InstitutionDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof InstitutionDto
+     */
+    'id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InstitutionDto
+     */
+    'name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InstitutionDto
+     */
+    'fullName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InstitutionDto
+     */
+    'environmentType'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InstitutionDto
+     */
+    'credentialsType'?: string;
+    /**
+     * 
+     * @type {Array<CountriesDto>}
+     * @memberof InstitutionDto
+     */
+    'countries'?: Array<CountriesDto>;
+    /**
+     * 
+     * @type {Array<MediaDto>}
+     * @memberof InstitutionDto
+     */
+    'media'?: Array<MediaDto>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof InstitutionDto
+     */
+    'features'?: Array<string>;
+    /**
+     * 
+     * @type {object}
+     * @memberof InstitutionDto
+     */
+    'monitoring': object;
+}
+/**
+ * 
+ * @export
+ * @interface MediaDto
+ */
+export interface MediaDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof MediaDto
+     */
+    'source': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MediaDto
+     */
+    'type': string;
 }
 /**
  * 

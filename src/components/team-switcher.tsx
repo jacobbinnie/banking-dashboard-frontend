@@ -92,9 +92,8 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
           >
             <Avatar className="mr-2 h-5 w-5">
               <AvatarImage
-                src={`https://avatar.vercel.sh/${selectedTeam.value}.png`}
+                src={`https://pbs.twimg.com/profile_images/1765023764360646656/bP44FP7C_400x400.jpg`}
                 alt={selectedTeam.label}
-                className="grayscale"
               />
               <AvatarFallback>JB</AvatarFallback>
             </Avatar>

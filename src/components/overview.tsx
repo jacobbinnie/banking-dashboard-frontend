@@ -1,6 +1,13 @@
 "use client";
 
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  LineChart,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 const data = [
   {
@@ -53,24 +60,25 @@ const data = [
   },
 ];
 
-export function Overview() {
+const burn = [
+  { name: "Jan", total: 5000 },
+  { name: "Feb", total: 4500 },
+  { name: "Mar", total: 4000 },
+  { name: "Apr", total: 3500 },
+  { name: "May", total: 3000 },
+  { name: "Jun", total: 2500 },
+  { name: "Jul", total: 2000 },
+  { name: "Aug", total: 1500 },
+  { name: "Sep", total: 1000 },
+  { name: "Oct", total: 500 },
+  { name: "Nov", total: 400 },
+  { name: "Dec", total: 300 },
+];
+
+export function Overview({ type }: { type: "BURN" | "FLOW" }) {
   return (
-    <ResponsiveContainer width="100%" height={350}>
-      <BarChart data={data}>
-        <XAxis
-          dataKey="name"
-          stroke="#888888"
-          fontSize={12}
-          tickLine={false}
-          axisLine={false}
-        />
-        <YAxis
-          stroke="#888888"
-          fontSize={12}
-          tickLine={false}
-          axisLine={false}
-          tickFormatter={(value) => `$${value}`}
-        />
+    <ResponsiveContainer width="100%" height={150}>
+      <BarChart data={type === "FLOW" ? data : burn}>
         <Bar
           dataKey="total"
           fill="currentColor"
