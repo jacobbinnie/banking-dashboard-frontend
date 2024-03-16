@@ -2,8 +2,6 @@ import { Metadata } from "next";
 import Image from "next/image";
 
 import { MainNav } from "@/components/main-nav";
-import { Overview } from "@/components/overview";
-import { RecentSales } from "@/components/recent-sales";
 import { Search } from "@/components/search";
 import TeamSwitcher from "@/components/team-switcher";
 import { UserNav } from "@/components/user-nav";
@@ -21,6 +19,7 @@ import { accountsQuery } from "../../../types/queries";
 import { useQuery } from "@tanstack/react-query";
 import AccountCard from "@/components/account-card";
 import ChartCard from "@/components/chart-card";
+import Transaction from "@/components/transaction";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -40,7 +39,11 @@ export default function Dashboard() {
     isLoading: accountsIsLoading,
   } = useQuery(accountsQuery.accountsControllerGetAccountsAndBalances());
 
-  console.log(accountsData);
+  const {
+    data: transactions,
+    error: transactionsError,
+    isLoading: transactionsLoading,
+  } = useQuery(accountsQuery.accountsControllerGetAccountTransactions());
 
   return (
     <>
@@ -91,15 +94,20 @@ export default function Dashboard() {
                   title={"Monthly spend"}
                   total={runwayData?.monthlyOutgoing ?? 0}
                 />
-                <Card className="col-span-3">
+                <Card className="col-span-2 lg:col-span-6">
                   <CardHeader>
-                    <CardTitle>Recent Sales</CardTitle>
+                    <CardTitle>Recent transactions</CardTitle>
                     <CardDescription>
-                      You made 265 sales this month.
+                      {transactions?.transactions.length} transactions in the
+                      past 30 days
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <RecentSales />
+                    <div className="space-y-8">
+                      {transactions?.transactions.map((transaction) => (
+                        <Transaction transaction={transaction} />
+                      ))}
+                    </div>
                   </CardContent>
                 </Card>
               </div>
