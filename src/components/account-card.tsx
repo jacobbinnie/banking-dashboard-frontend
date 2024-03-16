@@ -1,18 +1,25 @@
+import { Dispatch, SetStateAction } from "react";
 import { AccountAndBalanceDto } from "../../types/generated";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 interface AccountCardProps {
   account: AccountAndBalanceDto;
+  setSelectedAccount: Dispatch<
+    SetStateAction<AccountAndBalanceDto | undefined>
+  >;
 }
 
-function AccountCard({ account }: AccountCardProps) {
+function AccountCard({ account, setSelectedAccount }: AccountCardProps) {
   const formattedBalance = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: account.currency,
   }).format(account.balance!);
 
   return (
-    <Card>
+    <Card
+      onClick={() => setSelectedAccount(account)}
+      className="cursor-pointer hover:bg-muted transition-all"
+    >
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">
           {account.institution?.name}
@@ -23,7 +30,6 @@ function AccountCard({ account }: AccountCardProps) {
       </CardHeader>
       <CardContent>
         <p className="text-2xl font-bold">{formattedBalance}</p>
-        <p className="text-xs text-muted-foreground">+20.1% from last month</p>
       </CardContent>
     </Card>
   );

@@ -725,6 +725,35 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        accountsControllerGetAllTransactions: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/accounts/getAllTransactions`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         accountsControllerGetMonthlyIncomingTransactions: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/accounts/getMonthlyIncomingTransactions`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -914,6 +943,17 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async accountsControllerGetAllTransactions(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountTransactionsDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.accountsControllerGetAllTransactions(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountsApi.accountsControllerGetAllTransactions']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async accountsControllerGetMonthlyIncomingTransactions(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountTransactionsDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accountsControllerGetMonthlyIncomingTransactions(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -997,6 +1037,14 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        accountsControllerGetAllTransactions(options?: any): AxiosPromise<AccountTransactionsDto> {
+            return localVarFp.accountsControllerGetAllTransactions(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         accountsControllerGetMonthlyIncomingTransactions(options?: any): AxiosPromise<AccountTransactionsDto> {
             return localVarFp.accountsControllerGetMonthlyIncomingTransactions(options).then((request) => request(axios, basePath));
         },
@@ -1062,6 +1110,16 @@ export class AccountsApi extends BaseAPI {
      */
     public accountsControllerGetAccountsAndBalances(options?: RawAxiosRequestConfig) {
         return AccountsApiFp(this.configuration).accountsControllerGetAccountsAndBalances(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public accountsControllerGetAllTransactions(options?: RawAxiosRequestConfig) {
+        return AccountsApiFp(this.configuration).accountsControllerGetAllTransactions(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

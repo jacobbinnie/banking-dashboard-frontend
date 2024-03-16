@@ -1,18 +1,25 @@
+import clsx from "clsx";
 import { AccountTransactionDto } from "../../types/generated";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 
 interface TransactionProps {
   transaction: AccountTransactionDto;
+  minimal?: boolean;
 }
 
-function Transaction({ transaction }: TransactionProps) {
+function Transaction({ transaction, minimal }: TransactionProps) {
   const formattedAmount = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: transaction.currency,
   }).format(transaction.amount!);
 
   return (
-    <div className="grid grid-cols-3 items-center w-full">
+    <div
+      className={clsx(
+        minimal ? "grid-cols-2" : "grid-cols-3",
+        "grid items-center w-full"
+      )}
+    >
       <div>
         <div className="flex flex-row items-center">
           <Avatar className="h-9 w-9">
@@ -28,9 +35,11 @@ function Transaction({ transaction }: TransactionProps) {
           </div>
         </div>
       </div>
-      <p className="text-sm font-medium leading-none text-right">
-        {transaction.proprietaryBankTransactionCode?.issuer}
-      </p>
+      {!minimal && (
+        <p className="text-sm font-medium leading-none text-right">
+          {transaction.proprietaryBankTransactionCode?.issuer}
+        </p>
+      )}
       <p className="font-medium text-right">{formattedAmount}</p>
     </div>
   );

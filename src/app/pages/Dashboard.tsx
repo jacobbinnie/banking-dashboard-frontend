@@ -27,11 +27,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { accountsApi } from "../../../types";
-import { set } from "date-fns";
 import { Toaster, toast } from "sonner";
 import { Icons } from "@/components/icons";
+import { AccountAndBalanceDto } from "../../../types/generated";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -39,27 +38,32 @@ export const metadata: Metadata = {
 };
 
 export default function Dashboard() {
-  const {
-    data: runwayData,
-    error: runwayError,
-    isLoading: runwayLoading,
-  } = useQuery(accountsQuery.accountsControllerGetTotalRunwayInMonths());
-
-  const {
-    data: accountsData,
-    error: accountsError,
-    isLoading: accountsIsLoading,
-  } = useQuery(accountsQuery.accountsControllerGetAccountsAndBalances());
-
-  const {
-    data: transactions,
-    error: transactionsError,
-    isLoading: transactionsLoading,
-  } = useQuery(accountsQuery.accountsControllerGetAccountTransactions());
-
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedAccount, setSelectedAccount] =
+    useState<AccountAndBalanceDto>();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [constructedUrl, setConstructedUrl] = useState<string>();
+
+  const { data: runwayData } = useQuery(
+    accountsQuery.accountsControllerGetTotalRunwayInMonths()
+  );
+
+  const { data: accountsData } = useQuery(
+    accountsQuery.accountsControllerGetAccountsAndBalances()
+  );
+
+  const { data: transactions } = useQuery(
+    accountsQuery.accountsControllerGetAllTransactions()
+  );
+
+  const { data: accountTransactions, isLoading: accountTransactionsLoading } =
+    useQuery(
+      accountsQuery.accountsControllerGetAccountTransactions({
+        data: {
+          accountId: selectedAccount?.institution.id,
+        },
+      })
+    );
 
   const params = new URLSearchParams(window.location.search);
   const authCode = params.get("authcode");
@@ -112,6 +116,42 @@ export default function Dashboard() {
     <>
       <Toaster />
       <Dialog
+        open={!!selectedAccount}
+        onOpenChange={() => {
+          setSelectedAccount(undefined);
+        }}
+      >
+        <DialogContent className="overflow-scroll max-h-[300px]">
+          <DialogHeader>
+            <DialogTitle>{selectedAccount?.institution.name}</DialogTitle>
+          </DialogHeader>
+
+          {isLoading ? (
+            <div className="w-full items-center justify-center flex">
+              <Icons.spinner className="h-4 w-4 animate-spin" />
+            </div>
+          ) : (
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent transactions</CardTitle>
+                <CardDescription>
+                  {accountTransactions?.transactions.length} transactions in the
+                  past 30 days
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-8">
+                  {accountTransactions?.transactions.map((transaction) => (
+                    <Transaction minimal transaction={transaction} />
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
         open={dialogOpen}
         onOpenChange={() => {
           setConstructedUrl(undefined);
@@ -150,7 +190,7 @@ export default function Dashboard() {
                       </CardHeader>
                       <CardContent>
                         <Button
-                          className="hover:px-8 transition-all"
+                          className="hover:px-6 transition-all"
                           variant={"secondary"}
                           onClick={() =>
                             handleConnectNewBank(provider.institutionId)
@@ -196,7 +236,11 @@ export default function Dashboard() {
             <TabsContent value="overview" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 {accountsData?.accounts.map((account) => (
-                  <AccountCard key={account.id} account={account} />
+                  <AccountCard
+                    setSelectedAccount={setSelectedAccount}
+                    key={account.id}
+                    account={account}
+                  />
                 ))}
               </div>
               <div className="grid gap-y-4 lg:gap-4 md:grid-cols-2 lg:grid-cols-6">
