@@ -318,10 +318,10 @@ export interface AccountTransactionDto {
     'isoBankTransactionCode'?: object;
     /**
      * 
-     * @type {object}
+     * @type {ProprietaryBankTransactionCodeDto}
      * @memberof AccountTransactionDto
      */
-    'proprietaryBankTransactionCode'?: object;
+    'proprietaryBankTransactionCode'?: ProprietaryBankTransactionCodeDto;
     /**
      * 
      * @type {TransactionBalanceDto}
@@ -560,6 +560,25 @@ export interface MediaDto {
      * @memberof MediaDto
      */
     'type': string;
+}
+/**
+ * 
+ * @export
+ * @interface ProprietaryBankTransactionCodeDto
+ */
+export interface ProprietaryBankTransactionCodeDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ProprietaryBankTransactionCodeDto
+     */
+    'code'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProprietaryBankTransactionCodeDto
+     */
+    'issuer'?: string;
 }
 /**
  * 

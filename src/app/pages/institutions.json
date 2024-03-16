@@ -1,0 +1,47 @@
+[
+  {
+    "name": "JP Morgan Chase",
+    "icon": "https://user-images.githubusercontent.com/48891420/54894562-406ecc80-4e89-11e9-95a7-915a185675a1.jpg",
+    "institutionId": "1"
+  },
+  {
+    "name": "Bank of America",
+    "icon": "https://play-lh.googleusercontent.com/GdICLxnKd-e-lmV46N_SjihWHzAUX1nj8e--dF2KrQjvomN4zxOR-iEWwsTG_Tqr_oc",
+    "institutionId": "2"
+  },
+  {
+    "name": "HSBC",
+    "icon": "https://icons.veryicon.com/png/o/business/bank-logo-2/bank-hsbc.png",
+    "institutionId": "3"
+  },
+  {
+    "name": "Wells Fargo",
+    "icon": "https://play-lh.googleusercontent.com/PE63C7p2ESXFmCkWHC9fzISW_GOztyuvghOL3dFnC1Cd4b2HRqOn0HMmSF9WgS0jaU0=w240-h480-rw",
+    "institutionId": "4"
+  },
+  {
+    "name": "Unicredit Bank",
+    "icon": "https://1000logos.net/wp-content/uploads/2020/09/UniCredit-Bank-Emblem.jpg",
+    "institutionId": "5"
+  },
+  {
+    "name": "Deutsche Bank",
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Deutsche_Bank_logo_without_wordmark.svg/2048px-Deutsche_Bank_logo_without_wordmark.svg.png",
+    "institutionId": "6"
+  },
+  {
+    "name": "Santander",
+    "icon": "https://i.pinimg.com/originals/51/68/a8/5168a85631d2a0923374c252c2c5a0a8.png",
+    "institutionId": "7"
+  },
+  {
+    "name": "Citi Bank",
+    "icon": "https://play-lh.googleusercontent.com/UQXR3wgk9MFKyRW4II0RPWAFAT0LHOO0d1QDUI4_oy3JN9LEcMH1Sx8b-toXwh486bg",
+    "institutionId": "9"
+  },
+  {
+    "name": "Goldman Sachs",
+    "icon": "https://pbs.twimg.com/profile_images/1441140440791617537/JICPNdbf_400x400.png",
+    "institutionId": "10"
+  }
+]

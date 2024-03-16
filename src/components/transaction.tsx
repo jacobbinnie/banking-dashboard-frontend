@@ -29,7 +29,7 @@ function Transaction({ transaction }: TransactionProps) {
         </div>
       </div>
       <p className="text-sm font-medium leading-none text-right">
-        {transaction.transactionInformation}
+        {transaction.proprietaryBankTransactionCode?.issuer}
       </p>
       <p className="font-medium text-right">{formattedAmount}</p>
     </div>

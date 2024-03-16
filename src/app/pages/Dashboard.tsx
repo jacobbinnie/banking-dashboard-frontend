@@ -1,6 +1,5 @@
 import { Metadata } from "next";
-import Image from "next/image";
-
+import BankProviders from "./institutions.json";
 import { MainNav } from "@/components/main-nav";
 import { Search } from "@/components/search";
 import TeamSwitcher from "@/components/team-switcher";
@@ -20,6 +19,19 @@ import { useQuery } from "@tanstack/react-query";
 import AccountCard from "@/components/account-card";
 import ChartCard from "@/components/chart-card";
 import Transaction from "@/components/transaction";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { accountsApi } from "../../../types";
+import { set } from "date-fns";
+import { Toaster, toast } from "sonner";
+import { Icons } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -45,8 +57,117 @@ export default function Dashboard() {
     isLoading: transactionsLoading,
   } = useQuery(accountsQuery.accountsControllerGetAccountTransactions());
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [constructedUrl, setConstructedUrl] = useState<string>();
+
+  const params = new URLSearchParams(window.location.search);
+  const authCode = params.get("authcode");
+  const authState = params.get("authstate");
+
+  const handleConnectNewBank = async (institutionId: string) => {
+    setIsLoading(true);
+    try {
+      const response =
+        await accountsApi.accountsControllerInitiateConnectAccount({
+          applicationUserId: "",
+          institutionId: institutionId,
+        });
+      setTimeout(() => {
+        setConstructedUrl(response.data);
+        setIsLoading(false);
+      }, 2000);
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+    }
+  };
+
+  const handleVerifyBankConnect = async (
+    authCode: string,
+    authState: string
+  ) => {
+    try {
+      setIsLoading(true);
+      await accountsApi.accountsControllerVerifyConnect({
+        authCode,
+        authState,
+      });
+
+      toast.success("Bank account connected successfully");
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (authCode && authState && !isLoading) {
+      handleVerifyBankConnect(authCode, authState);
+    }
+  }, [authCode, authState]);
+
   return (
     <>
+      <Toaster />
+      <Dialog
+        open={dialogOpen}
+        onOpenChange={() => {
+          setConstructedUrl(undefined);
+          setDialogOpen(false);
+        }}
+      >
+        <DialogContent className="overflow-scroll max-h-[300px]">
+          <DialogHeader>
+            <DialogTitle>Connect a new bank account</DialogTitle>
+            <DialogDescription>Select a bank provider</DialogDescription>
+          </DialogHeader>
+
+          {isLoading ? (
+            <div className="w-full items-center justify-center flex">
+              <Icons.spinner className="h-4 w-4 animate-spin" />
+            </div>
+          ) : (
+            <>
+              {constructedUrl ? (
+                <Button
+                  onClick={() => window.open(constructedUrl, "_blank")}
+                  variant={"secondary"}
+                >
+                  Proceed to authenticate →
+                </Button>
+              ) : (
+                <>
+                  {BankProviders.map((provider) => (
+                    <Card
+                      key={provider.institutionId}
+                      className="flex w-full items-end justify-between"
+                    >
+                      <CardHeader>
+                        <img src={provider.icon} width={24} />
+                        <CardTitle>{provider.name}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <Button
+                          className="hover:px-8 transition-all"
+                          variant={"secondary"}
+                          onClick={() =>
+                            handleConnectNewBank(provider.institutionId)
+                          }
+                        >
+                          Connect
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </>
+              )}
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
       <div className="flex flex-col md:flex">
         <div className="border-b">
           <div className="flex h-16 items-center px-4">
@@ -65,7 +186,7 @@ export default function Dashboard() {
               <Button variant={"secondary"}>
                 <DownloadIcon className="w-5 h-5" />
               </Button>
-              <Button>
+              <Button onClick={() => setDialogOpen(true)}>
                 <PlusIcon className="w-3 h-3 mr-1" />
                 Link bank account
               </Button>
@@ -75,7 +196,7 @@ export default function Dashboard() {
             <TabsContent value="overview" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 {accountsData?.accounts.map((account) => (
-                  <AccountCard account={account} />
+                  <AccountCard key={account.id} account={account} />
                 ))}
               </div>
               <div className="grid gap-y-4 lg:gap-4 md:grid-cols-2 lg:grid-cols-6">
